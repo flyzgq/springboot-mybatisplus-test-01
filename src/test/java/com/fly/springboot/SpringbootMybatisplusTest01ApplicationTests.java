@@ -34,8 +34,8 @@ public class SpringbootMybatisplusTest01ApplicationTests {
         Employee employee = new Employee();
         employee.setLastName("mp");
         employee.setEmail("mp@163.com");
-//        employee.setGender(1);
-//        employee.setAge(22);
+        employee.setGender(1);
+        employee.setAge(22);
         //insert 方法在插入时， 会根据实体类的每个属性进行非空判断，只有非空的属性对应的字段才会出现在SQL语句中
         Integer insert = employeeMapper.insert(employee);
         LOGGER.debug("*******************************key : {}********************", employee.getId());
@@ -121,7 +121,7 @@ public class SpringbootMybatisplusTest01ApplicationTests {
 
     @Test
     public void testDeleteById(){
-        Integer integer = employeeMapper.deleteById(14);
+        Integer integer = employeeMapper.deleteById(3);
         Assert.assertTrue(integer > 0);
     }
 
@@ -142,5 +142,135 @@ public class SpringbootMybatisplusTest01ApplicationTests {
     @Test
     public void testDelete(){
         employeeMapper.delete(new EntityWrapper<Employee>().eq("last_name", "mp"));
+    }
+
+    @Test
+    public void testEntityMapperSelect(){
+        List<Employee> employees = employeeMapper.selectPage(new Page<Employee>(2, 2),
+                new EntityWrapper<Employee>()
+                        .between("age", 18, 50)
+                        .eq("gender", 1)
+                        .eq("last_name", "mp")
+        );
+
+        LOGGER.debug("********************employees : {}*********************", employees);
+    }
+
+    /*SELECT
+            id,
+    last_name AS lastName,
+    email,
+    gender,
+    age
+            FROM
+    tbl_employee
+    WHERE
+            (
+                    gender = 0
+                    AND last_name LIKE '%m%'
+                    OR email LIKE '%163%'
+            )*/
+
+    @Test
+    public void testSelectList(){
+        List<Employee> employees = employeeMapper.selectList(new EntityWrapper<Employee>()
+                .eq("gender", 0)
+                .like("last_name", "m")
+                .or()
+                .like("email", "163")
+        );
+        LOGGER.debug("********************employees : {}*********************", employees);
+    }
+
+
+    /*SELECT
+            id,
+    last_name AS lastName,
+    email,
+    gender,
+    age
+            FROM
+    tbl_employee
+    WHERE
+            (
+                    gender = 0
+                    AND last_name LIKE '%m%'
+            )
+    OR (
+            email LIKE '%163%'
+    )*/
+    @Test
+    public void testSelectListORNew(){
+        List<Employee> employees = employeeMapper.selectList(new EntityWrapper<Employee>()
+                .eq("gender", 0)
+                .like("last_name", "m")
+                .orNew()
+                .like("email", "163")
+        );
+        LOGGER.debug("********************employees : {}*********************", employees);
+    }
+
+    @Test
+    public void testEntityWrapper(){
+        Employee employee = new Employee();
+        employee.setLastName("苍老师");
+        employee.setEmail("mptest@163.com");
+        employee.setGender(0);
+        Integer update = employeeMapper.update(employee,
+                new EntityWrapper<Employee>()
+                        .eq("last_name", "苍老师")
+                        .eq("age", 22)
+        );
+
+        Assert.assertTrue(update > 0);
+        LOGGER.debug("********************update: {}**************************", update);
+    }
+
+
+    @Test
+    public void testEntityWrapperDelete(){
+        Integer delete = employeeMapper.delete(new EntityWrapper<Employee>()
+                .eq("last_name", "苍老师")
+                .eq("age", 22)
+        );
+
+        LOGGER.debug("**********************delete: {}***********************", delete);
+    }
+
+    /**
+     * 默认升序
+     */
+    @Test
+    public void testOrder(){
+        List<Employee> employees = employeeMapper.selectList(new EntityWrapper<Employee>()
+                .eq("gender", 1)
+                .orderBy("age")
+        );
+
+        LOGGER.debug("***********************employees: {}****************************", employees);
+    }
+
+    @Test
+    public void testOrderDesc(){
+        List<Employee> employees = employeeMapper.selectList(new EntityWrapper<Employee>()
+                .eq("gender", 1)
+                .orderDesc(Arrays.asList("age"))
+        );
+
+        LOGGER.debug("***********************employees: {}****************************", employees);
+    }
+
+    /**
+     * 默认升序
+     */
+    @Test
+    public void testOrderLast(){
+        List<Employee> employees = employeeMapper.selectList(new EntityWrapper<Employee>()
+                .eq("gender", 1)
+                .orderBy("age")
+                .last("desc limit 1, 2")//有sql注入风险
+        );
+
+        LOGGER.debug("***********************employees: {}****************************", employees);
     }
 }
