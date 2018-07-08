@@ -1,39 +1,39 @@
 package com.fly.springboot.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.annotations.Version;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.enums.IdType;
+import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableName;
+import java.io.Serializable;
 
 /**
- * @author fly
- * @date 2018/6/30 18:55
- * @description
- **/
-@TableName(value = "tbl_employee")
-public class Employee {
-//    @TableId(value = "id", type = IdType.AUTO)
+ * <p>
+ * 
+ * </p>
+ *
+ * @author flyzgq
+ * @since 2018-07-08
+ */
+@TableName("tbl_employee")
+public class Employee extends Model<Employee> {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键
+     */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     private String lastName;
     private String email;
-    private Integer gender;
+    private String gender;
     private Integer age;
 
-    /**
-     * avatr 在数据库中没有对应的字段
-     */
-    @TableField(exist = false)
-    private String avatr;
-    public Employee() {
-    }
-
-    public Employee(String lastName, String email, Integer gender, Integer age, String avatr) {
-        this.lastName = lastName;
-        this.email = email;
-        this.gender = gender;
-        this.age = age;
-        this.avatr = avatr;
-    }
+    @Version
+    private Integer version;
 
     public Integer getId() {
         return id;
@@ -59,11 +59,11 @@ public class Employee {
         this.email = email;
     }
 
-    public Integer getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Integer gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -75,23 +75,27 @@ public class Employee {
         this.age = age;
     }
 
-    public String getAvatr() {
-        return avatr;
+    public Integer getVersion() {
+        return version;
     }
 
-    public void setAvatr(String avatr) {
-        this.avatr = avatr;
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    @Override
+    protected Serializable pkVal() {
+        return this.id;
     }
 
     @Override
     public String toString() {
         return "Employee{" +
-                "id=" + id +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", gender=" + gender +
-                ", age=" + age +
-                ", avatr='" + avatr + '\'' +
-                '}';
+        ", id=" + id +
+        ", lastName=" + lastName +
+        ", email=" + email +
+        ", gender=" + gender +
+        ", age=" + age +
+        "}";
     }
 }

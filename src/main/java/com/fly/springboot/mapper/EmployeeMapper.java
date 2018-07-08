@@ -1,14 +1,25 @@
 package com.fly.springboot.mapper;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.fly.springboot.entity.Employee;
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author fly
- * @date 2018/6/30 20:04
- * @description
- **/
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
+ * @author flyzgq
+ * @since 2018-07-08
+ */
 @Repository
 public interface EmployeeMapper extends BaseMapper<Employee> {
+
+    /**
+     *
+     * @return
+     */
+    int deleteAll();
+
+
 }

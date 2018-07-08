@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="springboot-mybatisplus-test-01" />
+        <module name="springboot-mybatisplus-test-autocore" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="springboot-mybatisplus-test-01" target="1.8" />
+      <module name="springboot-mybatisplus-test-autocore" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
